@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #E9F0F8; --grid: #D3DFEC; --ink: #0B2545; --mute: #48617F; --card: #FFFFFF;
+  --line: #9DB4CF; --acc: #FFC857; --acct: #8A5A00; --accon: #0B2545;
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #0B2545; --grid: #14335C; --ink: #EEF4ED; --mute: #9FB3CC; --card: #0F2C52; --line: #2F5183; --acct: #FFC857;
+  }
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #0B2545; --grid: #14335C; --ink: #EEF4ED; --mute: #9FB3CC; --card: #0F2C52; --line: #2F5183; --acct: #FFC857;
+}
+
+html { height: 100%; scroll-behavior: smooth; scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  min-height: 100%; margin: 0; background-color: var(--bg); color: var(--ink);
+  font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+:focus-visible { outline: 3px solid var(--acc); outline-offset: 3px; }
+
+.rise { opacity: 0; transform: translateY(14px); animation: rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
+@keyframes rise { to { opacity: 1; transform: none; } }
+.ping { transform-origin: 160px 160px; animation: ping 2.8s ease-out infinite; }
+@keyframes ping { 0% { transform: scale(0.2); opacity: 0.9; } 100% { transform: scale(1.15); opacity: 0; } }
+.panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s ease; }
+.panel[data-open='true'] { grid-template-rows: 1fr; }
+.panel > div { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; opacity: 1; transform: none; }
+  .ping { animation: none; opacity: 0.4; }
+  .panel { transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* Cursor spotlight: the blueprint grid lights up around the pointer */
+.spot {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.45;
+  background-image: linear-gradient(var(--acct) 1px, transparent 1px), linear-gradient(90deg, var(--acct) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(circle 190px at var(--mx, -999px) var(--my, -999px), #000, transparent);
+  mask-image: radial-gradient(circle 190px at var(--mx, -999px) var(--my, -999px), #000, transparent);
+}
+
+/* Technology strip */
+.marquee { display: flex; width: max-content; animation: marq 40s linear infinite; }
+.marq-wrap:hover .marquee { animation-play-state: paused; }
+@keyframes marq { to { transform: translateX(-50%); } }
+
+/* Project illustrations */
+.travel { animation: travel 2s linear infinite; }
+@keyframes travel { 0% { transform: translateX(0); opacity: 0; } 15%, 85% { opacity: 1; } 100% { transform: translateX(56px); opacity: 0; } }
+.pulse { transform-box: fill-box; transform-origin: center; animation: pulse 2s ease-out infinite; }
+@keyframes pulse { 0% { transform: scale(0.3); opacity: 0.9; } 100% { transform: scale(1.4); opacity: 0; } }
+.bar { transform-box: fill-box; transform-origin: left; animation: bar 2.4s ease-in-out infinite; }
+@keyframes bar { 0% { transform: scaleX(0); } 80%, 100% { transform: scaleX(1); } }
+.bob { animation: bob 1s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translateY(-6px); } }
+.swipe { animation: swipe 3s ease-in-out infinite; }
+@keyframes swipe { 0% { transform: translate(0, 20px); } 40%, 100% { transform: translate(0, 20px) translateX(46px); } }
+.arm { transform-box: fill-box; transform-origin: left center; animation: arm 3s ease-in-out infinite; }
+@keyframes arm { 0%, 35% { transform: rotate(0); } 50%, 85% { transform: rotate(-70deg); } 100% { transform: rotate(0); } }
+.msg { opacity: 0; animation: msg 4s ease infinite; }
+@keyframes msg { 0% { opacity: 0; transform: translateY(6px); } 10%, 70% { opacity: 1; transform: none; } 85%, 100% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee, .travel, .pulse, .bar, .bob, .swipe, .arm { animation: none; }
+  .msg { animation: none; opacity: 1; }
+  .spot { display: none; }
+}
